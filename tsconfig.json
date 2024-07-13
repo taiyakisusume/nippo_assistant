@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "module": "ESNext",
+        "lib": ["ESNext", "DOM"],
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "typeRoots": ["node_modules/@types"],
+        "outDir": "dist", // この設定がないと、ts ファイルと同一ディレクトリに js が生成されてしまう
+
+        "allowImportingTsExtensions": true,
+        "noEmit": true,
+        "jsx": "react-jsx"
+    },
+    "include": ["src"]
+}
