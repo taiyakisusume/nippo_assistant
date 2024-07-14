@@ -31,7 +31,7 @@ const panelController = async (tabId: number) => {
 
 chrome.tabs.onActivated.addListener(async ({tabId}) => panelController(tabId));
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (changeInfo.status != 'complete') return;
+    if (changeInfo.status != "complete") return;
     if (tab.status != "complete") return;
     await panelController(tabId);
 });
