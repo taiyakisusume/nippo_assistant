@@ -16,5 +16,5 @@ export type DairyReport = {
 
 export type Msg<T> = {
     type: MsgType;
-    data?: T;
+    data: T;
 };

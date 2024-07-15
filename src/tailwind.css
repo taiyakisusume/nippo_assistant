@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: Noto Sans JP;
+    src: url(./font/NotoSansJP-VariableFont_wght.ttf);
+}

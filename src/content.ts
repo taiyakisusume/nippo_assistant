@@ -72,10 +72,10 @@ const targetCallback = (targetElement: Element) => async () => {
     // if (targetElement.childElementCount === 0) return;
     const hashSet = new Set<string>();
     for (const child of targetElement.children) {
-        const team = child.children[0].textContent;
-        const place = child.children[1].textContent;
-        const id = child.children[2].textContent.split(" / ", 2);
-        const content = child.children[3].textContent.split(" ");
+        const team = child.children[0].textContent!;
+        const place = child.children[1].textContent!;
+        const id = child.children[2].textContent!.split(" / ", 2);
+        const content = child.children[3].textContent!.split(" ");
         let detail: string | null = content.slice(2).join(" ");
         if (!detail) detail = null;
         const data: DairyReport = {

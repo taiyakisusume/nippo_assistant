@@ -2,7 +2,7 @@ import {DairyReport, Msg} from "./types";
 import {useEffect, useState} from "react";
 
 export default function App() {
-    const [reports, setReports] = useState([]);
+    const [reports, setReports] = useState<DairyReport[]>([]);
 
     const reportPostCallback = (message: Msg<DairyReport[]>) => {
         if (message.type !== "report_post") return;
@@ -18,7 +18,8 @@ export default function App() {
                 .then((tabs) => tabs[0].id);
             if (!tabId) return;
             await chrome.tabs
-                .sendMessage<Msg<undefined>>(tabId, {
+                .sendMessage<Msg<string>>(tabId, {
+                    data: "",
                     type: "report_request",
                 })
                 .catch(() => {});
@@ -29,15 +30,15 @@ export default function App() {
     }, []); // 第二引数に空配列を渡すことで初回レンダリング時のみ実行される
 
     return (
-        <>
-            <h1>Vite+React</h1>
+        <div className="font-sans">
+            <h1 className="text-4xl">Vite+React</h1>
             {reports.map((report: DairyReport) => (
-                <li key={JSON.stringify(report)}>
+                <li key={JSON.stringify(report)} className="text-sm">
                     {report.id.business} / {report.id.service} /{" "}
                     {report.content.major} / {report.content.minor} /{" "}
                     {report.content.detail}
                 </li>
             ))}
-        </>
+        </div>
     );
 }
