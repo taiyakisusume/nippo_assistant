@@ -1,5 +1,6 @@
 import {DairyReport, Msg} from "./types";
 import {useEffect, useState} from "react";
+import {CardComponent} from "./component";
 
 export default function App() {
     const [reports, setReports] = useState<DairyReport[]>([]);
@@ -30,15 +31,37 @@ export default function App() {
     }, []); // 第二引数に空配列を渡すことで初回レンダリング時のみ実行される
 
     return (
-        <div className="font-sans">
-            <h1 className="text-4xl">Vite+React</h1>
-            {reports.map((report: DairyReport) => (
-                <li key={JSON.stringify(report)} className="text-sm">
-                    {report.id.business} / {report.id.service} /{" "}
-                    {report.content.major} / {report.content.minor} /{" "}
-                    {report.content.detail}
-                </li>
-            ))}
+        <div className="h-screen bg-stone-50 font-sans text-sm">
+            {/* todo: レスポンシブ対応考える */}
+            <div className="mx-auto flex max-w-2xl flex-col gap-2 overflow-hidden p-2">
+                {reports.length > 0 ? (
+                    <CardComponent>
+                        <CurrentReportComponent reports={reports} />
+                    </CardComponent>
+                ) : (
+                    <></>
+                )}
+            </div>
         </div>
     );
 }
+
+interface CurrentReportProps {
+    reports: DairyReport[];
+}
+
+const CurrentReportComponent = (props: CurrentReportProps) => {
+    return (
+        <>
+            {props.reports.map((report: DairyReport) => (
+                <li key={JSON.stringify(report)} className="px-4 py-5">
+                    {report.id.business} / {report.id.service} /{" "}
+                    {report.content.major} / {report.content.minor}
+                    {report.content.detail !== null
+                        ? ` / ${report.content.detail}`
+                        : ""}
+                </li>
+            ))}
+        </>
+    );
+};

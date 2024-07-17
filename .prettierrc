@@ -1,5 +1,10 @@
 {
     "singleQuote": false,
     "tabWidth": 4,
-    "bracketSpacing": false
+    "bracketSpacing": false,
+    "plugins": [
+        "prettier-plugin-tailwindcss",
+        "prettier-plugin-classnames",
+        "prettier-plugin-merge"
+    ]
 }
