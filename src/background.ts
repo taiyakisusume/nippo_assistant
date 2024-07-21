@@ -1,4 +1,5 @@
 import {REPORT_APPLY_URL} from "./const";
+import {Msg} from "./types";
 
 const enablePanel = async (tabId: number) => {
     await chrome.sidePanel.setOptions({
@@ -29,6 +30,9 @@ const panelController = async (tabId: number) => {
     await disablePanel(tabId);
 };
 
+chrome.sidePanel
+    .setPanelBehavior({openPanelOnActionClick: true})
+    .catch(() => {});
 chrome.tabs.onActivated.addListener(async ({tabId}) => panelController(tabId));
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
     if (changeInfo.status != "complete") return;

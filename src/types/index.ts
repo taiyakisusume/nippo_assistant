@@ -1,4 +1,4 @@
-type MsgType = "report_post" | "report_request";
+type MsgType = "report_post" | "report_force" | "report_request" | "panel_open";
 
 export type DairyReport = {
     team: string;
@@ -17,4 +17,12 @@ export type DairyReport = {
 export type Msg<T> = {
     type: MsgType;
     data: T;
+};
+
+export type StorageType = "options";
+
+export type OptionTitle = "autoReload";
+
+export type StoredOptions = {
+    [title: string]: boolean;
 };

@@ -15,6 +15,9 @@ export default defineConfig(({mode}) => {
             service_worker: "src/background.ts",
             type: "module",
         },
+        action: {
+            default_title: "クリックでパネルを開く",
+        },
         side_panel: {
             default_path: "index.html",
         },
@@ -24,7 +27,7 @@ export default defineConfig(({mode}) => {
                 js: ["src/content.ts"],
             },
         ],
-        permissions: ["sidePanel", "tabs"],
+        permissions: ["sidePanel", "tabs", "storage"],
     });
 
     return {
