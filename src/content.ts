@@ -1,8 +1,6 @@
 import {DairyReport, Msg} from "./types";
 import {encryptSha256} from "./lib/crypto.ts";
 import {REPORT_APPLY_URL} from "./const";
-import {getStoredOption} from "./lib/options.ts";
-import tabId = chrome.devtools.inspectedWindow.tabId;
 
 let oldUrl = "";
 
@@ -35,7 +33,7 @@ const reportRequestCallback = async (message: Msg<undefined>) => {
 };
 
 chrome.runtime.onMessage.addListener(reportRequestCallback);
-window.addEventListener("urlChange",   () => {
+window.addEventListener("urlChange", () => {
     if (location.pathname !== REPORT_APPLY_URL.pathname) return;
     const targetElement: Element | null =
         document.querySelector(targetSelector);

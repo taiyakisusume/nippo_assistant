@@ -1,5 +1,4 @@
 import {REPORT_APPLY_URL} from "./const";
-import {Msg} from "./types";
 
 const enablePanel = async (tabId: number) => {
     await chrome.sidePanel.setOptions({
