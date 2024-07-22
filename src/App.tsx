@@ -12,6 +12,7 @@ import {
     getStoredOption,
     getStoredOptions,
     OPTION_TEMPLATES,
+    OptionData,
     setStoredOptions,
 } from "./lib/options.ts";
 
@@ -22,7 +23,7 @@ export default function App() {
         let flag = false;
         if (message.type == "report_force") flag = true;
         if (message.type == "report_post")
-            flag = await getStoredOption("autoReload");
+            flag = await getStoredOption("auto_reload");
         if (!flag) return;
         setReports(message.data);
     };
@@ -84,12 +85,6 @@ interface HeaderProps {
     onReloadClick: (event: MouseEvent<HTMLButtonElement>) => void;
 }
 
-interface Option {
-    title: string;
-    default: boolean;
-    value: boolean;
-}
-
 const HeaderComponent = (props: HeaderProps) => {
     return (
         <Disclosure>
@@ -113,12 +108,16 @@ const HeaderComponent = (props: HeaderProps) => {
     );
 };
 
+export interface OptionValue extends OptionData {
+    value: boolean;
+}
+
 const OptionComponent = () => {
-    const [options, setOptions] = useState<Option[]>([]);
+    const [options, setOptions] = useState<OptionValue[]>([]);
 
     const OptionChangeCallback = async (
         checked: boolean,
-        option: Option,
+        option: OptionValue,
         index: number,
     ) => {
         const newOptions = [...options];
@@ -128,7 +127,7 @@ const OptionComponent = () => {
         });
         const storingData: StoredOptions = {};
         newOptions.forEach((option) => {
-            storingData[option.title] = option.value;
+            storingData[option.id] = option.value;
         });
         await setStoredOptions(storingData);
         setOptions(newOptions);
@@ -137,8 +136,8 @@ const OptionComponent = () => {
     useEffect(() => {
         (async () => {
             const currentOptions = await getStoredOptions();
-            const newOptions: Option[] = OPTION_TEMPLATES.map((option) => {
-                const value = currentOptions[option.title] ?? option.default;
+            const newOptions: OptionValue[] = OPTION_TEMPLATES.map((option) => {
+                const value = currentOptions[option.id] ?? option.default;
                 return {...option, value: value};
             });
             setOptions(newOptions);
@@ -149,7 +148,7 @@ const OptionComponent = () => {
         <>
             {options.map((option, index) => (
                 <div key={index}>
-                    {option.title}
+                    {option.id}
                     <SwitchComponent
                         checked={option.value}
                         onChange={async (checked) => {

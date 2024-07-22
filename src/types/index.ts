@@ -21,8 +21,6 @@ export type Msg<T> = {
 
 export type StorageType = "options";
 
-export type OptionTitle = "autoReload";
-
 export type StoredOptions = {
     [title: string]: boolean;
 };
