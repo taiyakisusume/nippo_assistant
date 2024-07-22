@@ -91,19 +91,6 @@ interface Option {
 }
 
 const HeaderComponent = (props: HeaderProps) => {
-    const [options, setOptions] = useState<Option[]>([]);
-
-    useEffect(() => {
-        (async () => {
-            const currentOptions = await getStoredOptions();
-            const newOptions: Option[] = OPTION_TEMPLATES.map((option) => {
-                const value = currentOptions[option.title] ?? option.default;
-                return {...option, value: value};
-            });
-            setOptions(newOptions);
-        })();
-    }, []);
-
     return (
         <Disclosure>
             <div className="flex justify-between text-gray-500">
@@ -119,31 +106,59 @@ const HeaderComponent = (props: HeaderProps) => {
             </div>
             <DisclosurePanel>
                 <CardComponent>
-                    {options.map((option, index) => (
-                        <div key={index}>
-                            {option.title}
-                            <SwitchComponent
-                                checked={option.value}
-                                onChange={async (checked) => {
-                                    const newOptions = [...options];
-                                    newOptions.splice(index, 1, {
-                                        ...option,
-                                        value: checked,
-                                    });
-                                    const storingData: StoredOptions = {};
-                                    newOptions.forEach((option) => {
-                                        storingData[option.title] =
-                                            option.value;
-                                    });
-                                    await setStoredOptions(storingData);
-                                    setOptions(newOptions);
-                                }}
-                            />
-                        </div>
-                    ))}
+                    <OptionComponent />
                 </CardComponent>
             </DisclosurePanel>
         </Disclosure>
+    );
+};
+
+const OptionComponent = () => {
+    const [options, setOptions] = useState<Option[]>([]);
+
+    const OptionChangeCallback = async (
+        checked: boolean,
+        option: Option,
+        index: number,
+    ) => {
+        const newOptions = [...options];
+        newOptions.splice(index, 1, {
+            ...option,
+            value: checked,
+        });
+        const storingData: StoredOptions = {};
+        newOptions.forEach((option) => {
+            storingData[option.title] = option.value;
+        });
+        await setStoredOptions(storingData);
+        setOptions(newOptions);
+    };
+
+    useEffect(() => {
+        (async () => {
+            const currentOptions = await getStoredOptions();
+            const newOptions: Option[] = OPTION_TEMPLATES.map((option) => {
+                const value = currentOptions[option.title] ?? option.default;
+                return {...option, value: value};
+            });
+            setOptions(newOptions);
+        })();
+    }, []);
+
+    return (
+        <>
+            {options.map((option, index) => (
+                <div key={index}>
+                    {option.title}
+                    <SwitchComponent
+                        checked={option.value}
+                        onChange={async (checked) => {
+                            await OptionChangeCallback(checked, option, index);
+                        }}
+                    />
+                </div>
+            ))}
+        </>
     );
 };
 
