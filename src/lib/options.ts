@@ -6,12 +6,14 @@ type OptionId = "auto_reload";
 
 export interface OptionData {
     id: OptionId;
+    title: string;
     default: boolean;
 }
 
 export const OPTION_TEMPLATES: OptionData[] = [
     {
         id: "auto_reload",
+        title: "自動更新",
         default: true,
     },
 ];
