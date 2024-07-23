@@ -19,7 +19,7 @@ export default defineConfig(({mode}) => {
             default_title: "クリックでパネルを開く",
         },
         side_panel: {
-            default_path: "index.html",
+            default_path: "src/static/index.html",
         },
         content_scripts: [
             {

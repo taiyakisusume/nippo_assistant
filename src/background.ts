@@ -3,7 +3,7 @@ import {REPORT_APPLY_URL} from "./const";
 const enablePanel = async (tabId: number) => {
     await chrome.sidePanel.setOptions({
         tabId,
-        path: "index.html",
+        path: "src/static/index.html",
         enabled: true,
     });
 };
