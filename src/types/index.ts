@@ -22,5 +22,5 @@ export type Msg<T> = {
 export type StorageType = "options";
 
 export type StoredOptions = {
-    [title: string]: boolean;
+    [id: string]: boolean;
 };
