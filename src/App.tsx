@@ -68,7 +68,7 @@ export default function App() {
     }, []); // 第二引数に空配列を渡すことで初回レンダリング時のみ実行される
 
     return (
-        <div className="h-screen bg-stone-50 font-sans text-sm">
+        <div className="h-screen bg-stone-50 font-sans text-sm font-medium">
             <div className="mx-auto flex max-w-2xl flex-col gap-2 overflow-hidden p-2">
                 <HeaderComponent onReloadClick={onReloadClick} />
                 {reports.length > 0 && (
