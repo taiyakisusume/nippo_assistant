@@ -1,6 +1,6 @@
 import {DairyReport, Msg, StoredOptions} from "./types";
 import {MouseEvent, useEffect, useState} from "react";
-import {CardComponent, SwitchComponent} from "./component";
+import {CardComponent, SwitchComponent, TooltipComponent} from "./component";
 import {
     Button,
     Disclosure,
@@ -69,7 +69,7 @@ export default function App() {
 
     return (
         <div className="h-screen bg-stone-50 font-sans text-sm font-medium">
-            <div className="mx-auto flex max-w-2xl flex-col gap-2 overflow-hidden p-2">
+            <div className="mx-auto flex max-w-2xl flex-col gap-2 p-2">
                 <HeaderComponent onReloadClick={onReloadClick} />
                 {reports.length > 0 && (
                     <CardComponent>
@@ -149,12 +149,18 @@ const OptionComponent = () => {
             {options.map((option, index) => (
                 <div key={index}>
                     {option.id}
-                    <SwitchComponent
-                        checked={option.value}
-                        onChange={async (checked) => {
-                            await OptionChangeCallback(checked, option, index);
-                        }}
-                    />
+                    <TooltipComponent tooltip={option.description}>
+                        <SwitchComponent
+                            checked={option.value}
+                            onChange={async (checked) => {
+                                await OptionChangeCallback(
+                                    checked,
+                                    option,
+                                    index,
+                                );
+                            }}
+                        />
+                    </TooltipComponent>
                 </div>
             ))}
         </>
