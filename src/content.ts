@@ -1,6 +1,7 @@
 import {DairyReport, Msg} from "./types";
 import {encryptSha256} from "./lib/crypto.ts";
 import {REPORT_APPLY_URL} from "./const";
+import {getStoredOption} from "./lib/options.ts";
 
 let oldUrl = "";
 
@@ -16,6 +17,17 @@ new MutationObserver(() => {
     childList: true,
     attributes: true,
     characterData: true,
+});
+
+getStoredOption("disable_notification").then((autoReload) => {
+    if (!autoReload) return;
+    const notificationStyle = document.createElement("style");
+    notificationStyle.textContent = `
+        .notistack-SnackbarContainer {
+            display: none;
+        }
+    `;
+    document.head.appendChild(notificationStyle);
 });
 
 const targetSelector =

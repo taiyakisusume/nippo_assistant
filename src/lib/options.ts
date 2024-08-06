@@ -2,7 +2,7 @@ import storage from "./storage.ts";
 import {decryptAes, encryptAes} from "./crypto.ts";
 import {StoredOptions} from "../types";
 
-type OptionId = "auto_reload";
+type OptionId = "auto_reload" | "disable_notification";
 
 export interface OptionData {
     id: OptionId;
@@ -17,6 +17,12 @@ export const OPTION_TEMPLATES: OptionData[] = [
         title: "自動更新",
         description: "自動で入力済み日報を読み込みます",
         default: true,
+    },
+    {
+        id: "disable_notification",
+        title: "通知非表示",
+        description: "LIME上の通知を非表示にします",
+        default: false,
     },
 ];
 
