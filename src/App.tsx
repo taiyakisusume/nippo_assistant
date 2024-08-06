@@ -175,12 +175,12 @@ const CurrentReportComponent = (props: CurrentReportProps) => {
     return (
         <>
             {props.reports.map((report: DairyReport) => (
-                <li key={JSON.stringify(report)} className="px-4 py-5">
+                <div key={JSON.stringify(report)} className="px-4 py-5">
                     {report.id.business} / {report.id.service} /{" "}
                     {report.content.major} / {report.content.minor}
                     {report.content.detail !== null &&
                         ` / ${report.content.detail}`}
-                </li>
+                </div>
             ))}
         </>
     );
