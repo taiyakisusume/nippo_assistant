@@ -1,17 +1,27 @@
 import storage from "./storage.ts";
 import {decryptAes, encryptAes} from "./crypto.ts";
-import {StoredOptions} from "../types";
+import {PickOptionValueProps} from "../types";
 
-type OptionId = "auto_reload" | "disable_notification";
+type OptionId = "auto_reload" | "notification_filter";
 
-export interface OptionData {
+export type OptionType = boolean | string;
+
+interface _OptionData<T> {
     id: OptionId;
     title: string;
     description?: string;
-    default: boolean;
+    default: T;
 }
+export interface OptionBase extends _OptionData<OptionType> {}
 
-export const OPTION_TEMPLATES: OptionData[] = [
+interface _Option<T> extends _OptionData<T> {
+    value: T;
+}
+export interface Option extends _Option<OptionType> {}
+
+export type StoredOptions = PickOptionValueProps<Option, "id", "value">;
+
+export const OPTION_TEMPLATES: OptionBase[] = [
     {
         id: "auto_reload",
         title: "自動更新",
@@ -19,10 +29,10 @@ export const OPTION_TEMPLATES: OptionData[] = [
         default: true,
     },
     {
-        id: "disable_notification",
-        title: "通知非表示",
-        description: "LIME上の通知を非表示にします",
-        default: false,
+        id: "notification_filter",
+        title: "通知フィルター",
+        description: "正規表現にマッチするLIMEの通知を非表示にします",
+        default: "",
     },
 ];
 

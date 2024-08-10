@@ -1,19 +1,22 @@
-import {DairyReport, Msg, StoredOptions} from "./types";
-import {MouseEvent, useEffect, useState} from "react";
+import {DairyReport, Msg} from "./types";
+import {ChangeEvent, MouseEvent, useEffect, useRef, useState} from "react";
 import {CardComponent, SwitchComponent, TooltipComponent} from "./component";
 import {
     Button,
     Disclosure,
     DisclosureButton,
     DisclosurePanel,
+    Input,
 } from "@headlessui/react";
 import {ArrowPathIcon, Cog6ToothIcon} from "@heroicons/react/24/outline";
 import {
     getStoredOption,
     getStoredOptions,
     OPTION_TEMPLATES,
-    OptionData,
+    OptionType,
+    Option,
     setStoredOptions,
+    StoredOptions,
 } from "./lib/options.ts";
 
 export default function App() {
@@ -23,7 +26,7 @@ export default function App() {
         let flag = false;
         if (message.type == "report_force") flag = true;
         if (message.type == "report_post")
-            flag = await getStoredOption("auto_reload");
+            flag = (await getStoredOption("auto_reload")) as boolean;
         if (!flag) return;
         setReports(message.data);
     };
@@ -108,63 +111,92 @@ const HeaderComponent = (props: HeaderProps) => {
     );
 };
 
-export interface OptionValue extends OptionData {
-    value: boolean;
-}
-
 const OptionComponent = () => {
-    const [options, setOptions] = useState<OptionValue[]>([]);
+    const [update, setUpdate] = useState<boolean>(false); // 強制再レンダリングさせる雑State
+    const options = useRef<Option[]>();
 
     const OptionChangeCallback = async (
-        checked: boolean,
-        option: OptionValue,
+        value: OptionType,
+        option: Option,
         index: number,
     ) => {
-        const newOptions = [...options];
+        const newOptions = [...options.current];
         newOptions.splice(index, 1, {
             ...option,
-            value: checked,
+            value: value,
         });
         const storingData: StoredOptions = {};
         newOptions.forEach((option) => {
             storingData[option.id] = option.value;
         });
         await setStoredOptions(storingData);
-        setOptions(newOptions);
+        options.current = newOptions;
     };
 
     useEffect(() => {
         (async () => {
             const currentOptions = await getStoredOptions();
-            const newOptions: OptionValue[] = OPTION_TEMPLATES.map((option) => {
+            options.current = OPTION_TEMPLATES.map((option) => {
                 const value = currentOptions[option.id] ?? option.default;
                 return {...option, value: value};
             });
-            setOptions(newOptions);
+            setUpdate(!update);
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <>
-            {options.map((option, index) => (
+            {options.current?.map((option, index) => (
                 <div key={index}>
                     {option.id}
                     <TooltipComponent tooltip={option.description}>
-                        <SwitchComponent
-                            checked={option.value}
-                            onChange={async (checked) => {
-                                await OptionChangeCallback(
-                                    checked,
-                                    option,
-                                    index,
-                                );
-                            }}
-                        />
+                        {typeof option.value === "boolean" && (
+                            <SwitchComponent
+                                checked={option.value}
+                                onChange={async (checked) => {
+                                    await OptionChangeCallback(
+                                        checked,
+                                        option,
+                                        index,
+                                    );
+                                }}
+                            />
+                        )}
+                        {typeof option.value === "string" && (
+                            <OptionInputComponent
+                                initialValue={option.value}
+                                onChange={async (input) => {
+                                    await OptionChangeCallback(
+                                        input,
+                                        option,
+                                        index,
+                                    );
+                                }}
+                            />
+                        )}
                     </TooltipComponent>
                 </div>
             ))}
         </>
     );
+};
+
+interface OptionInputProps {
+    initialValue: string;
+    onChange: (value: string) => void;
+}
+
+const OptionInputComponent = (props: OptionInputProps) => {
+    const [value, setValue] = useState(props.initialValue);
+
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.currentTarget.value;
+        props.onChange(newValue);
+        setValue(newValue);
+    };
+
+    return <Input value={value} onChange={handleChange} />;
 };
 
 interface CurrentReportProps {

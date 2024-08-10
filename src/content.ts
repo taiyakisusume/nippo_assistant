@@ -19,15 +19,27 @@ new MutationObserver(() => {
     characterData: true,
 });
 
-getStoredOption("disable_notification").then((autoReload) => {
-    if (!autoReload) return;
-    const notificationStyle = document.createElement("style");
-    notificationStyle.textContent = `
-        .notistack-SnackbarContainer {
-            display: none;
-        }
-    `;
-    document.head.appendChild(notificationStyle);
+new MutationObserver(async () => {
+    const notificationContainerList = document.getElementsByClassName(
+        "notistack-SnackbarContainer",
+    );
+    if (notificationContainerList.length === 0) return;
+    const filter = (await getStoredOption("notification_filter")) as string;
+    if (!filter) return; // フィルターが空文字の場合は何もしない
+    const regexp = new RegExp(filter as string);
+    for (const notification: HTMLElement of notificationContainerList[0]
+        .children) {
+        if (notification.style.display === "none") continue;
+        const notificationText = notification.querySelector(
+            "#notistack-snackbar",
+        )?.textContent;
+        if (!regexp.test(notificationText)) continue;
+        notification.style.display = "none";
+    }
+}).observe(document.body, {
+    subtree: true,
+    childList: true,
+    characterData: true,
 });
 
 const targetSelector =
