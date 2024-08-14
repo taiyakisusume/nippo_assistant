@@ -19,7 +19,7 @@ interface _Option<T> extends _OptionData<T> {
 }
 export interface Option extends _Option<OptionType> {}
 
-export type StoredOptions = PickOptionValueProps<Option, "id", "value">;
+export type StoredOptions = PickOptionValueProps<Option, "value">;
 
 export const OPTION_TEMPLATES: OptionBase[] = [
     {

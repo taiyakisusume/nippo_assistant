@@ -113,7 +113,7 @@ const HeaderComponent = (props: HeaderProps) => {
 
 const OptionComponent = () => {
     const [update, setUpdate] = useState<boolean>(false); // 強制再レンダリングさせる雑State
-    const options = useRef<Option[]>();
+    const options = useRef<Option[]>([]);
 
     const OptionChangeCallback = async (
         value: OptionType,

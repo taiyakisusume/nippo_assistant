@@ -27,14 +27,14 @@ new MutationObserver(async () => {
     const filter = (await getStoredOption("notification_filter")) as string;
     if (!filter) return; // フィルターが空文字の場合は何もしない
     const regexp = new RegExp(filter as string);
-    for (const notification: HTMLElement of notificationContainerList[0]
-        .children) {
-        if (notification.style.display === "none") continue;
-        const notificationText = notification.querySelector(
+    for (const notification of notificationContainerList[0].children) {
+        const notificationHTML = notification as HTMLElement;
+        if (notificationHTML.style.display === "none") continue;
+        const notificationText = notificationHTML.querySelector(
             "#notistack-snackbar",
-        )?.textContent;
+        )?.textContent as string;
         if (!regexp.test(notificationText)) continue;
-        notification.style.display = "none";
+        notificationHTML.style.display = "none";
     }
 }).observe(document.body, {
     subtree: true,

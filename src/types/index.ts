@@ -21,6 +21,6 @@ export type Msg<T> = {
 
 export type StorageType = "options";
 
-export type PickOptionValueProps<T, K extends keyof T, V extends keyof T> = {
-    [id: T[K]]: T[V];
+export type PickOptionValueProps<T, V extends keyof T> = {
+    [key: string]: T[V];
 };
