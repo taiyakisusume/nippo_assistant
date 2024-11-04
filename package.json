@@ -1,5 +1,5 @@
 {
-    "name": "nippo_assistant",
+    "name": "mojito",
     "type": "module",
     "scripts": {
         "dev": "vite",
