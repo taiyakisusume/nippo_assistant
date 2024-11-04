@@ -1,4 +1,4 @@
-import {getStoredOption} from "./lib/options.ts";
+import {getStoredOption} from "../lib/options.ts";
 
 // 通知フィルター実行部分
 new MutationObserver(async () => {

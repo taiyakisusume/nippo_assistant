@@ -1,6 +1,6 @@
-import {DairyReport, Msg} from "./types";
-import {encryptSha256} from "./lib/crypto.ts";
-import {REPORT_APPLY_URL} from "./const";
+import {DairyReport, Msg} from "../types";
+import {encryptSha256} from "../lib/crypto.ts";
+import {REPORT_APPLY_URL} from "../const";
 
 // 入力済み日報が表示されるテーブルのCSSセレクタ
 const targetSelector =

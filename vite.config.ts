@@ -14,22 +14,22 @@ export default defineConfig(({mode}) => {
         description: "日報申請を少しだけ楽にするChrome拡張機能",
         version: "1.0.0",
         background: {
-            service_worker: "src/background.ts",
+            service_worker: "src/background/index.ts",
             type: "module",
         },
         action: {
             default_title: "クリックでパネルを開く",
         },
         side_panel: {
-            default_path: "src/static/index.html",
+            default_path: "src/assets/index.html",
         },
         content_scripts: [
             {
                 matches: [matcher],
                 js: [
-                    "src/event.ts",
-                    "src/dairy_report.ts",
-                    "src/notification.ts",
+                    "src/content/event.ts",
+                    "src/content/dairy_report.ts",
+                    "src/content/notification.ts",
                 ],
             },
         ],

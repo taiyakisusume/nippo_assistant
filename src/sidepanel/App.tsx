@@ -1,6 +1,6 @@
-import {DairyReport, Msg} from "./types";
+import {DairyReport, Msg} from "../types";
 import {ChangeEvent, MouseEvent, useEffect, useRef, useState} from "react";
-import {CardComponent, SwitchComponent, TooltipComponent} from "./component";
+import {CardComponent, SwitchComponent, TooltipComponent} from "../component";
 import {
     Button,
     Disclosure,
@@ -17,7 +17,7 @@ import {
     Option,
     setStoredOptions,
     StoredOptions,
-} from "./lib/options.ts";
+} from "../lib/options.ts";
 
 export default function App() {
     const [reports, setReports] = useState<DairyReport[]>([]);
