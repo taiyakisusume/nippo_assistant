@@ -4,6 +4,8 @@ import {crx, defineManifest} from "@crxjs/vite-plugin";
 
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd());
+    // SPA的な遷移で目的のURLに変化した場合、content_scriptsは読み込まれない
+    // そのため、ドメインが一致するURL全てにマッチするようにしている
     const matcher = new URL(env.VITE_CONTENT_URL).origin + "/*";
 
     const manifest = defineManifest({
