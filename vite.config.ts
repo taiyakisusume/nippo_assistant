@@ -26,7 +26,11 @@ export default defineConfig(({mode}) => {
         content_scripts: [
             {
                 matches: [matcher],
-                js: ["src/event.ts", "src/dairy_report.ts", "src/notification.ts"],
+                js: [
+                    "src/event.ts",
+                    "src/dairy_report.ts",
+                    "src/notification.ts",
+                ],
             },
         ],
         permissions: ["sidePanel", "tabs", "storage"],
